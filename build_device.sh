@@ -20,24 +20,25 @@ cp $ZIP /home/roman/upload/$NAME
 cd $BUILD_ROOT
 cd ../upload
 
+#
+# this is kind of dirty nasty, but create directories, then upload
+#
+
+sftp goo <<EOF
+mkdir ./roms_html/$2
+quit
+EOF
+
+sftp inffy <<EOF
+mkdir /home/teamkang/public_html/roms/$2
+quit
+EOF
+
+sftp maddler <<EOF
+mkdir /home/teamkang/www/$2
+quit
+EOF
+
 rsync -avP -e "ssh" ./$NAME goo:/home/roman/roms_html/$2/$NAME &
 rsync -avP -e "ssh" ./$NAME inffy:/home/teamkang/public_html/roms/$2/$NAME &
 rsync -avP -e "ssh" ./$NAME maddler:/home/teamkang/www/$2/$NAME &
-
-#sftp goo <<EOF
-#mkdir ./roms_html/$2
-#put ./$NAME ./roms_html/$2/$NAME
-#quit
-#EOF
-
-#sftp inffy <<EOF
-#mkdir /home/teamkang/public_html/roms/$2
-#put ./$NAME /home/teamkang/public_html/roms/$2/$NAME
-#quit
-#EOF
-
-#sftp maddler <<EOF
-#mkdir /home/teamkang/www/$2
-#put ./$NAME /home/teamkang/www/$2/$NAME
-#quit
-#EOF
