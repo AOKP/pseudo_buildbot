@@ -15,7 +15,7 @@ cd $BUILD_ROOT
 . build/envsetup.sh
 lunch $1
 #make -j`grep 'processor' /proc/cpuinfo | wc -l` otapackage
-make -j16 otapackage
+make -j9 otapackage
 make otapackage bacon
 ZIP=$(find $BUILD_ROOT/out/target/product/$2/ -maxdepth 1 -name aokp_$2*-squished.zip)
 cp $ZIP /home/roman/upload/$NAME
