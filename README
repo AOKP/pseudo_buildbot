@@ -31,9 +31,7 @@ DEPENDENCIES
 CONFIGURING PSEUDO
 
     All you have to do to configure Pseudo to work with your vendor is to add
-    it to your manifest to be cloned to vendor/YOUR_VENDOR/bot/ and modify the
-    ROM_VENDOR value in deploy.sh (at time of writing, line 20). I hope to make
-    this setup disappear as soon as I can figure out a better way of doing it.
+    it to your manifest to be cloned to vendor/YOUR_VENDOR/bot/. That's it!
     Additionally, if you want Pseudo to upload your builds to a remote server
     you must create a file named upload in Pseudo's directory and make it
     executable. Any bash script will work for it. I have left a (bad) example

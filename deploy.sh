@@ -15,9 +15,8 @@ fi
 # build_device <lunch combo> <device name>
 #
 
-# need to fix this
-#ROM_VENDOR=$(cat vendor/aokp/vendorsetup.sh | cut -f2 -d ' ' | cut -f1 -d '_' | cut -f1 -d '-')
-ROM_VENDOR=aokp
+# find the ROM vendor from the manifest path for Pseudo
+ROM_VENDOR=$(grep pseudo_buildbot .repo/manifest.xml | cut -f4 -d ' ' | cut -f2 -d '/')
 
 # aokp_vzwtab-userdebug
 cat vendor/$ROM_VENDOR/vendorsetup.sh | cut -f2 -d ' ' > .bot_lunch
