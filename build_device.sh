@@ -15,7 +15,7 @@ OUTD=$(echo $(cd ../upload && pwd))
 # $2 should be device name
 
 # build
-make -j9 bacon
+make -j$(grep processor /proc/cpuinfo | wc -l) bacon
 
 # clean out of previous zip
 OUTZ=$(echo $TARGET_PRODUCT)_$VER.zip
