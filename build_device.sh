@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# select device and prepare varibles
+BUILD_ROOT=`pwd`
+cd $BUILD_ROOT
+. build/envsetup.sh
+lunch $1
+
 TARGET_VENDOR=$(echo $TARGET_PRODUCT | cut -f1 -d '_')
 VER=$(cat vendor/$TARGET_VENDOR/products/common_versions.mk | grep "TARGET_PRODUCT" | cut -f3 -d '_' | cut -f1 -d ' ')
 ZIP=$(find $(echo $ANDROID_PRODUCT_OUT) -maxdepth 1 -name $TARGET_VENDOR_*-squished.zip)
@@ -10,11 +16,6 @@ OUTD=$(echo $(cd ../test && pwd))
 # $2 should be device name
 
 # build
-BUILD_ROOT=`pwd`
-cd $BUILD_ROOT
-. build/envsetup.sh
-lunch $1
-#make -j`grep 'processor' /proc/cpuinfo | wc -l` otapackage
 make -j9 bacon
 #ZIP=$(find $(echo $ANDROID_PRODUCT_OUT) -maxdepth 1 -name $TARGET_VENDOR_$2*-squished.zip)
 #OUTD=$(echo $(cd ../test && pwd))
