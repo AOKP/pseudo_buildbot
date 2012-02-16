@@ -1,0 +1,69 @@
+	Pseudo Buildbot
+
+Pseudo is more than the pseudo build bot she started off as, but she likes the
+name she was given at birth, so celebrate her.
+
+WHAT IS PSEUDO?
+
+    Pseudo is a series of scripts meant to automate an Android build for every
+    device your vendor supports. Pseudo supports uploading to remote servers
+    as well!
+
+DEPENDENCIES
+
+    Pseudo is dependent upon a few, very vital things. The primary being that
+    Your Android build environment is maintained in the standard (recommended
+    by Google) way. Meaning you have a vendor repo with all of your custom
+    build/packaging scripts, overrides, etc... Pseudo will live as a sub-
+    project in your vendor repo (don't forget to add it to your vendors
+    .gitignore).
+
+    Additionally, by default, Pseudo relies on you to be using the CyanogenMod
+    team squisher (found here
+      https://github.com/CyanogenMod/android_vendor_cm/blob/ics/tools/squisher)
+    and the ability to 'make bacon'. However, if you do not build using this
+    system, or prefer making fastboot images (etc), the scripts can be easily
+    modified to accommodate you.
+
+    Other than that, Pseudo *should* be vendor and build independent, to the
+    extent of being able to work with major manufacturers build trees.
+
+CONFIGURING PSEUDO
+
+    All you have to do to configure Pseudo to work with your vendor is to add
+    it to your manifest to be cloned to vendor/YOUR_VENDOR/bot/ and modify the
+    ROM_VENDOR value in deploy.sh (at time of writing, line 20). I hope to make
+    this setup disappear as soon as I can figure out a better way of doing it.
+    Additionally, if you want Pseudo to upload your builds to a remote server
+    you must create a file named upload in Pseudo's directory and make it
+    executable. Any bash script will work for it. I have left a (bad) example
+    as upload_example for ideas. Everything else is completely automated,
+    unlike other build bots where you have to configure what devices to build,
+    set different calls (or even individual build scripts per device!).
+    Pseudo uses all the information already available in the Android build
+    environment!
+
+SO YOU WANT TO USE PSEUDO?
+
+    Great! That's what she's here for! I do ask though, if you find any ways of
+    making her better, shoot a pull request our way.
+
+PSEUDOS FUTURE
+
+    -Add an if override for the .build_target file so user doesn't have to
+    build everything if they don't want to.
+
+    -More debugging options (exit if anything in the builds fail, etc.).
+
+    -Add a nightly/RC/stable toggle for the builds.
+
+    -And more!
+
+
+AUTHORS OF PSEUDO
+
+    Romanbb (https://github.com/romanbb)
+    -Original Author and Unicorn wrangler.
+
+    KhasMek (http://github.com/KhasMek)
+    -Kanger of original script and maker of moar betterer.
