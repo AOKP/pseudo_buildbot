@@ -1,0 +1,10 @@
+#!/bin/bash
+#
+# this is kind of dirty nasty, but create directories, then upload
+#
+
+VER=$(cat ../AOKP/vendor/aokp/products/common_versions.mk | grep "TARGET_PRODUCT" | cut -f3 -d '_' | cut -f1 -d ' ')
+NAME=aokp_$1_$VER.zip
+mkdir -p ~/Android/test1/$1
+cd ~/Android/test/
+rsync -aHS ./$NAME ~/Android/test1/$1/$NAME &
