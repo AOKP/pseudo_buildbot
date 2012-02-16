@@ -1,43 +1,31 @@
 #!/bin/bash
 
-BUILD_ROOT=~/aokp
-BUILDBOT=~/buildbot
-
-# setup folders
-rm -R ../upload
-mkdir ../upload
-
-# clean
+BUILD_ROOT=`pwd`
 cd $BUILD_ROOT
-repo sync
+#repo sync
 . build/envsetup.sh
 
-if [ $1 = "clean" ]; then 
+# check for clean
+if [ "$1" = "clean" ]; then
 	make clean
+	rm .bot_lunch
 fi
 
-#
-# build_device <lunch combo> <device name>
-#
-cd $BUILDBOT
-./build_device.sh 7 maguro
-./build_device.sh 8 toro
-./build_device.sh 5 crespo
-./build_device.sh 6 crespo4g
-./build_device.sh 9 p4wifi
-./build_device.sh 10 tenderloin
-./build_device.sh 11 vivow
-./build_device.sh 12 p4
-./build_device.sh 13 p4vzw
-./build_device.sh 10 tenderloin
-./build_device.sh 11 vivow
-./build_device.sh 14 stingray
-./build_device.sh 15 wingray
-./build_device.sh 16 supersonic
-./build_device.sh 17 inc
-./build_device.sh 18 vzwtab
+# find the ROM vendor from the manifest path for Pseudo
+ROM_VENDOR=$(grep pseudo_buildbot .repo/manifest.xml | cut -f4 -d ' ' | cut -f2 -d '/')
 
-cd ~/upload
+# aokp_vzwtab-userdebug
+cat vendor/$ROM_VENDOR/vendorsetup.sh | cut -f2 -d ' ' > .bot_lunch
 
-# done!
-md5sum aokp_*
+# build packages
+#
+# read the file and execute lunch
+while read line ;do
+    # vzwtab
+    DEVNAME=$(echo $line | cut -f2 -d ' ' | cut -f2 -d '_' | cut -f1 -d '-')
+    # build_device <lunch combo> <device name>
+    ./vendor/$ROM_VENDOR/bot/build_device.sh $line $DEVNAME
+done < .bot_lunch
+
+# don't be messy
+rm .bot_lunch
