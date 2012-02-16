@@ -8,25 +8,24 @@ cd $BUILD_ROOT
 
 if [ "$1" = "clean" ]; then
 	make clean
+	rm .bot_lunch
 fi
 
 #
 # build_device <lunch combo> <device name>
 #
-./vendor/aokp/bot/build_device.sh 7 maguro
-./vendor/aokp/bot/build_device.sh 8 toro
-./vendor/aokp/bot/build_device.sh 5 crespo
-./vendor/aokp/bot/build_device.sh 6 crespo4g
-./vendor/aokp/bot/build_device.sh 9 p4wifi
-./vendor/aokp/bot/build_device.sh 10 tenderloin
-./vendor/aokp/bot/build_device.sh 11 vivow
-./vendor/aokp/bot/build_device.sh 12 p4
-./vendor/aokp/bot/build_device.sh 13 p4vzw
-./vendor/aokp/bot/build_device.sh 10 tenderloin
-./vendor/aokp/bot/build_device.sh 11 vivow
-./vendor/aokp/bot/build_device.sh 14 stingray
-./vendor/aokp/bot/build_device.sh 15 wingray
-./vendor/aokp/bot/build_device.sh 16 supersonic
-./vendor/aokp/bot/build_device.sh 17 inc
-./vendor/aokp/bot/build_device.sh 18 vzwtab
+
+# need to fix this
+#ROM_VENDOR=$(cat vendor/aokp/vendorsetup.sh | cut -f2 -d ' ' | cut -f1 -d '_' | cut -f1 -d '-')
+ROM_VENDOR=aokp
+
+# aokp_vzwtab-userdebug
+cat vendor/$ROM_VENDOR/vendorsetup.sh | cut -f2 -d ' ' | tee .bot_lunch
+
+# read the file and execute lunch/test
+while read line ;do
+    # vzwtab
+    DEVNAME=$(echo $line | cut -f2 -d ' ' | cut -f2 -d '_' | cut -f1 -d '-')
+    ./vendor/$ROM_VENDOR/bot/build_device.sh $line $DEVNAME
+done < .bot_lunch
 
