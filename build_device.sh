@@ -8,7 +8,7 @@ lunch $1
 
 TARGET_VENDOR=$(echo $TARGET_PRODUCT | cut -f1 -d '_')
 VER=$(cat vendor/$TARGET_VENDOR/products/common_versions.mk | grep "TARGET_PRODUCT" | cut -f3 -d '_' | cut -f1 -d ' ')
-ZIP=$(find $(echo $ANDROID_PRODUCT_OUT) -maxdepth 1 -name $TARGET_VENDOR_*-squished.zip)
+ZIP=$(find $(echo $ANDROID_PRODUCT_OUT) -maxdepth 1 -name $(echo $TARGET_PRODUCT)_*-squished.zip)
 OUTD=$(echo $(cd ../upload && pwd))
 
 # $1 should be lunch combo
