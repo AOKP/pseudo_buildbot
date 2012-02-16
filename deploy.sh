@@ -29,3 +29,4 @@ while read line ;do
     ./vendor/$ROM_VENDOR/bot/build_device.sh $line $DEVNAME
 done < .bot_lunch
 
+rm .bot_lunch
