@@ -20,7 +20,7 @@ fi
 ROM_VENDOR=aokp
 
 # aokp_vzwtab-userdebug
-cat vendor/$ROM_VENDOR/vendorsetup.sh | cut -f2 -d ' ' | tee .bot_lunch
+cat vendor/$ROM_VENDOR/vendorsetup.sh | cut -f2 -d ' ' > .bot_lunch
 
 # read the file and execute lunch/test
 while read line ;do
