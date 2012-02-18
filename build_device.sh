@@ -9,7 +9,7 @@ cd $BUILD_ROOT
 lunch $1
 
 TARGET_VENDOR=$(echo $TARGET_PRODUCT | cut -f1 -d '_')
-VER=$(cat vendor/$TARGET_VENDOR/products/common_versions.mk | grep "TARGET_PRODUCT" | cut -f3 -d '_' | cut -f1 -d ' ')
+VER=$(cat vendor/$TARGET_VENDOR/configs/common_versions.mk | grep "TARGET_PRODUCT" | cut -f3 -d '_' | cut -f1 -d ' ')
 ZIP=$(find $(echo $ANDROID_PRODUCT_OUT) -maxdepth 1 -name $(echo $TARGET_PRODUCT)_*-squished.zip)
 OUTD=$(echo $(cd ../upload && pwd))
 
