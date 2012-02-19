@@ -2,7 +2,7 @@
 
 BUILD_ROOT=`pwd`
 cd $BUILD_ROOT
-#repo sync
+repo sync
 . build/envsetup.sh
 
 # check for clean
