@@ -9,9 +9,9 @@ cd $BUILD_ROOT
 lunch $1
 
 TARGET_VENDOR=$(echo $TARGET_PRODUCT | cut -f1 -d '_')
-CV=$(find vendor/$TARGET_PRODUCT/ -name common_versions.mk)
+CV=$(find vendor/$TARGET_VENDOR/ -name common_versions.mk)
 VER=$(cat $CV | grep "TARGET_PRODUCT" | cut -f3 -d '_' | cut -f1 -d ' ')
-ZIP=$(find $(echo $ANDROID_PRODUCT_OUT) -maxdepth 1 -name $(echo $TARGET_PRODUCT)_*-squished.zip)
+ZIP=$ANDROID_PRODUCT_OUT)/$TARGET_PRODUCT_$VER-squished.zip
 OUTD=$(echo $(cd ../upload && pwd))
 
 # build
