@@ -10,7 +10,7 @@ lunch $1
 
 TARGET_VENDOR=$(echo $TARGET_PRODUCT | cut -f1 -d '_')
 CV=$(find vendor/$TARGET_VENDOR/ -name common_versions.mk)
-VER=$(cat $CV | grep "TARGET_PRODUCT" | cut -f3 -d '_' | cut -f1 -d ' ')
+VER=$(cat /tank/roman/kang/vendor/aokp/configs/common_versions.mk | grep "TARGET_PRODUCT" | cut -f3 -d '_' | head -n 1)
 
 # build
 make -j$(grep processor /proc/cpuinfo | wc -l) bacon
