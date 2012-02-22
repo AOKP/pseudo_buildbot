@@ -9,25 +9,22 @@ cd $BUILD_ROOT
 lunch $1
 
 TARGET_VENDOR=$(echo $TARGET_PRODUCT | cut -f1 -d '_')
-CV=$(find vendor/$TARGET_VENDOR/ -name common_versions.mk)
-VER=$(cat $CV | grep "TARGET_PRODUCT" | cut -f3 -d '_' | cut -f1 -d ' ')
 
 # build
-make -j$(grep processor /proc/cpuinfo | wc -l) bacon
+make -j$(grep processor /proc/cpuinfo | wc -l) bacon 2>&1 | tee "$ANDROID_PRODUCT_OUT"/"$TARGET_PRODUCT"_bot.log
 
 # clean out of previous zip
-ZIP=$(find $(echo $ANDROID_PRODUCT_OUT) -maxdepth 1 -name $(echo $TARGET_PRODUCT)_*-squished.zip)
+ZIP=$(tail -2 "$ANDROID_PRODUCT_OUT"/"$TARGET_PRODUCT"_bot.log | cut -f3 -d ' ' | cut -f1 -d ' ' | sed -e '/^$/ d')
 OUTD=$(echo $(cd ../upload && pwd))
-OUTZ=$(echo $TARGET_PRODUCT)_$VER.zip
-rm -rf $OUTD/$OUTZ
-cp $ZIP $OUTD/$OUTZ
+rm -rf $OUTD/$ZIP
+cp "$ANDROID_PRODUCT_OUT"/$ZIP $OUTD/
 
 # finish
 echo "$2 build complete"
 
 # md5sum list
 cd $OUTD
-md5sum $OUTZ | cat >> md5sum
+md5sum $ZIP | cat >> md5sum
 
 # upload
 echo "checking on upload reference file"
@@ -35,12 +32,13 @@ echo "checking on upload reference file"
 BUILDBOT=$BUILD_ROOT/vendor/$TARGET_VENDOR/bot/
 cd $BUILDBOT
 if test -x upload ; then
-        echo "Upload file exists, executing now"
-        cp upload $OUTD
-        cd $OUTD
-        ./upload $2 && rm upload
+    echo "Upload file exists, executing now"
+    cp upload $OUTD
+    cd $OUTD
+    # device and zip names are passed on for upload
+    ./upload $2 $ZIP && rm upload
 else
-        echo "No upload file found (or set to +x), build complete."
+    echo "No upload file found (or set to +x), build complete."
 fi
 
 cd $BUILT_ROOT
