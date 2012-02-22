@@ -10,6 +10,12 @@ lunch $1
 
 TARGET_VENDOR=$(echo $TARGET_PRODUCT | cut -f1 -d '_')
 
+# create log dir if not already present
+if test ! -d "$ANDROID_PRODUCT_OUT"
+    echo "$ANDROID_PRODUCT_OUT doesn't exist, creating now"
+    then mkdir -p "$ANDROID_PRODUCT_OUT"
+fi
+
 # build
 make -j$(grep processor /proc/cpuinfo | wc -l) bacon 2>&1 | tee "$ANDROID_PRODUCT_OUT"/"$TARGET_PRODUCT"_bot.log
 
