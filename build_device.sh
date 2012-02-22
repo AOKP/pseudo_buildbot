@@ -16,8 +16,8 @@ make -j$(grep processor /proc/cpuinfo | wc -l) bacon 2>&1 | tee "$ANDROID_PRODUC
 # clean out of previous zip
 ZIP=$(tail -2 "$ANDROID_PRODUCT_OUT"/"$TARGET_PRODUCT"_bot.log | cut -f3 -d ' ' | cut -f1 -d ' ' | sed -e '/^$/ d')
 OUTD=$(echo $(cd ../upload && pwd))
-rm -rf $OUTD/$ZIP
-cp "$ANDROID_PRODUCT_OUT"/$ZIP $OUTD/
+rm $OUTD/$ZIP
+cp "$ANDROID_PRODUCT_OUT"/$ZIP $OUTD/$ZIP
 
 # finish
 echo "$2 build complete"
