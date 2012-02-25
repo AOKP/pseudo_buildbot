@@ -26,9 +26,9 @@ fi
 
 # build
 if [ "$BACON" = "true" ]; then
-    make -j$(grep processor /proc/cpuinfo | wc -l) bacon 2>&1 | tee "$ANDROID_PRODUCT_OUT"/"$TARGET_PRODUCT"_bot.log
+    make -j$(($(grep processor /proc/cpuinfo | wc -l) * 2)) bacon 2>&1 | tee "$ANDROID_PRODUCT_OUT"/"$TARGET_PRODUCT"_bot.log
 else
-    make -j$(grep processor /proc/cpuinfo | wc -l) otapackage 2>&1 | tee "$ANDROID_PRODUCT_OUT"/"$TARGET_PRODUCT"_bot.log
+    make -j$(($(grep processor /proc/cpuinfo | wc -l) * 2)) otapackage 2>&1 | tee "$ANDROID_PRODUCT_OUT"/"$TARGET_PRODUCT"_bot.log
 fi
 
 # clean out of previous zip
