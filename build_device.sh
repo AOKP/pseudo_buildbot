@@ -63,4 +63,4 @@ else
     echo "No upload file found (or set to +x), build complete."
 fi
 
-cd $BUILT_ROOT
+cd $BUILD_ROOT
