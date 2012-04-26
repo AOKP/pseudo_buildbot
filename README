@@ -41,6 +41,19 @@ CONFIGURING PSEUDO
     Pseudo uses all the information already available in the Android build
     environment!
 
+    Pseudo does have some options you can call during execution they are as
+    follows
+    -c = Remove your out/ to create a clean build enviornment for you to
+         start off the main build with.
+    -o = Essential what this does is tell Pseudo to use a different vendor's
+         vendorsetup.sh, but not break the build automation of Pseudo. This
+         will most commonly be use for themers who build their themes from
+         source overlays.
+
+         EXAMPLE: ./vendor/aokp/bot/deploy.sh -c -o unicorns
+           will rm -rf out/ before the build, and use the vendorsetup found
+           in vendor/unicorns/vendorsetup.sh instead of vendor/aokp.
+
 SO YOU WANT TO USE PSEUDO?
 
     Great! That's what she's here for! I do ask though, if you find any ways of
