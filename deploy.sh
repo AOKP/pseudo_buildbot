@@ -11,6 +11,12 @@ if [ "$1" = "clean" ]; then
 	rm .bot_lunch
 fi
 
+# Check for add_kernel_manifest (mostly just for aokp).
+if [ -f platform_manifest/add_kernel_manifest.sh ]; then
+	echo "kernel manifest exists, syncing kernel sources"
+	./platform_manifest/add_kernel_manifest.sh
+fi
+
 # find the ROM vendor from the manifest path for Pseudo
 ROM_VENDOR=$(grep pseudo_buildbot .repo/manifest.xml | cut -f4 -d ' ' | cut -f2 -d '/')
 
