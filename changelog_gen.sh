@@ -21,8 +21,19 @@ do
     if [ -z "$log" ]; then
         echo "Nothing updated on $project, skipping"
     else
+        # Prepend group project ownership to each project.
+        origin=`grep "$project" $rdir/.repo/manifest.xml | awk {'print $4'} | cut -f2 -d '"'`
+        if [ "$origin" = "aokp" ]; then
+            repo_credit=AOKP
+        elif [ "$origin" = "aosp" ]; then
+            repo_credit=AOSP
+        elif [ "$origin" = "cm" ]; then
+            repo_credit=CyanogenMod
+        else
+            repo_credit="error finding project owners"
+        fi
         # Write the changelog
-        echo "Project name: $project" >> "$rdir"/Changelog_$cdate.txt
+        echo "$repo_credit Project name: $project" >> "$rdir"/Changelog_$cdate.txt
         echo "$log" | while read line
         do
              echo "  •$line" >> "$rdir"/Changelog_$cdate.txt
