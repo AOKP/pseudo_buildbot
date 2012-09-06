@@ -2,6 +2,7 @@
 
 # $1 should be lunch combo
 # $2 should be device name
+# $3 should be build number (if applicable)
 # select device and prepare varibles
 BUILD_ROOT=`pwd`
 cd $BUILD_ROOT
@@ -39,7 +40,12 @@ else
 fi
 OUTD=$(echo $(cd ../upload && pwd))
 rm $OUTD/$ZIP
-cp "$ANDROID_PRODUCT_OUT"/$ZIP $OUTD/$ZIP
+if [ -z "$3" ]; then
+    NZIP="$TARGET_PRODUCT"_jb-"$3".zip
+    cp "$ANDROID_PRODUCT_OUT"/$ZIP $OUTD/$NZIP
+else
+    cp "$ANDROID_PRODUCT_OUT"/$ZIP $OUTD/$ZIP
+fi
 
 # finish
 echo "$2 build complete"
