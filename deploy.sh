@@ -36,7 +36,9 @@ if [ -f platform_manifest/add_kernel_manifest.sh ]; then
 fi
 
 # find the ROM vendor from the manifest path for Pseudo
-ROM_VENDOR=$(grep pseudo_buildbot .repo/manifest.xml | cut -f4 -d ' ' | cut -f2 -d '/')
+#ROM_VENDOR=$(grep pseudo_buildbot .repo/manifest.xml | cut -f4 -d ' ' | cut -f2 -d '/')
+# or use the local manifest
+ROM_VENDOR=$(grep pseudo_buildbot .repo/local_manifest.xml | cut -f5 -d ' ' | cut -f2 -d '/')
 
 # see if we are using a theme overlay or the ROM's vendorsetup
 if [ "$THEME_VENDOR" != "" ]; then
