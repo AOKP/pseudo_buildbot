@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# source my android profile. Probably best if you comment this out
+. ~/bin/.android_profile
+
 BUILD_ROOT=`pwd`
 cd $BUILD_ROOT
 . build/envsetup.sh
