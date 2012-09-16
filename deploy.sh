@@ -62,6 +62,15 @@ fi
 # have user pick the target and execute lunch
 lunch
 DEVNAME=$(echo $TARGET_PRODUCT-$TARGET_BUILD_VARIANT)
+if [ "$TARGET_PRODUCT" = ""$ROM_VENDOR"_inc" ]; then
+    echo "Reverting commits that break the build for the inc"
+    cd $BUILD_ROOT/hardware/qcom/display
+    git revert 89770608f0 --no-edit
+    git revert 5fcbecb --no-edit
+    git revert 48bcc28 --no-edit
+    cd $BUILD_ROOT
+fi
+
 ./vendor/$ROM_VENDOR/bot/build_device.sh $DEVNAME
 
 # build packages
