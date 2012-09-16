@@ -57,7 +57,11 @@ if [ ! -f vendor/$VENDOR/vendorsetup.sh ]; then
 fi
 
 # aokp_vzwtab-userdebug
-cat vendor/$VENDOR/vendorsetup.sh | cut -f2 -d ' ' > .bot_lunch
+#cat vendor/$VENDOR/vendorsetup.sh | cut -f2 -d ' ' > .bot_lunch
+
+# have user pick the target
+lunch
+DEVNAME=$(echo $TARGET_PRODUCT-$TARGET_BUILD_VARIANT)
 
 # build packages
 #
