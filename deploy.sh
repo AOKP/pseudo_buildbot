@@ -2,8 +2,8 @@
 
 BUILD_ROOT=`pwd`
 cd $BUILD_ROOT
-repo sync
 . build/envsetup.sh
+reposync
 
 # parse options
 while getopts ":c :o:" opt
