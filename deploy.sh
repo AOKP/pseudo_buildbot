@@ -59,19 +59,20 @@ fi
 # aokp_vzwtab-userdebug
 #cat vendor/$VENDOR/vendorsetup.sh | cut -f2 -d ' ' > .bot_lunch
 
-# have user pick the target
+# have user pick the target and execute lunch
 lunch
 DEVNAME=$(echo $TARGET_PRODUCT-$TARGET_BUILD_VARIANT)
+./vendor/$ROM_VENDOR/bot/build_device.sh $DEVNAME
 
 # build packages
 #
 # read the file and execute lunch
-while read line ;do
+#while read line ;do
     # vzwtab
 #    DEVNAME=$(echo $line | cut -f2 -d ' ' | cut -f2 -d '_' | cut -f1 -d '-')
     # build_device <lunch combo> <device name>
-    ./vendor/$ROM_VENDOR/bot/build_device.sh $line $DEVNAME
-done < .bot_lunch
+#   ./vendor/$ROM_VENDOR/bot/build_device.sh $line $DEVNAME
+#done < .bot_lunch
 
 # don't be messy
-rm .bot_lunch
+#rm .bot_lunch
