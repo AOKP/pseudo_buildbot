@@ -3,6 +3,8 @@
 # $1 should be lunch combo
 # $2 should be device name
 # select device and prepare varibles
+DATE=$(date +%h-%d-%y)
+LOG_DIR=logs
 BUILD_ROOT=`pwd`
 cd $BUILD_ROOT
 . build/envsetup.sh
@@ -18,25 +20,38 @@ else
     BACON=true
 fi
 
+# host OS check
+if [ "$(uname -s)" = "Darwin" ]; then
+    LOLMAC=true
+fi
+
 # create log dir if not already present
-if test ! -d "$ANDROID_PRODUCT_OUT"
-    echo "$ANDROID_PRODUCT_OUT doesn't exist, creating now"
-    then mkdir -p "$ANDROID_PRODUCT_OUT"
+if test ! -d "$LOG_DIR"
+    echo "log directory doesn't exist, creating now"
+    then mkdir -p "$LOG_DIR"
 fi
 
 # build
 if [ "$BACON" = "true" ]; then
-    make -j$(($(grep processor /proc/cpuinfo | wc -l) * 2)) bacon 2>&1 | tee "$ANDROID_PRODUCT_OUT"/"$TARGET_PRODUCT"_bot.log
+    if [ "$LOLMAC" = "true" ]; then
+        make -j `sysctl hw.ncpu|cut -d" " -f2` bacon 2>&1 | tee "$LOG_DIR"/"$TARGET_PRODUCT"_"$DATE"_bot.log
+    else
+        schedtool -B -n 1 -e ionice -n 1 make -j `cat /proc/cpuinfo | grep "^processor" | wc -l` bacon 2>&1 | tee "$LOG_DIR"/"$TARGET_PRODUCT"_"$DATE"_bot.log
+    fi
+elif [ "$LOLMAC" = "true" ]; then
+    make -j `sysctl hw.ncpu|cut -d" " -f2` otapackage 2>&1 | tee "$LOG_DIR"/"$TARGET_PRODUCT"_"$DATE"_bot.log
 else
-    make -j$(($(grep processor /proc/cpuinfo | wc -l) * 2)) otapackage 2>&1 | tee "$ANDROID_PRODUCT_OUT"/"$TARGET_PRODUCT"_bot.log
+    schedtool -B -n 1 -e ionice -n 1 make -j `cat /proc/cpuinfo | grep "^processor" | wc -l` otapackage 2>&1 | tee "$LOG_DIR"/"$TARGET_PRODUCT"_"$DATE"_bot.log
 fi
 
 # clean out of previous zip
 if [ "$BACON" = "true" ]; then
-    ZIP=$(tail -2 "$ANDROID_PRODUCT_OUT"/"$TARGET_PRODUCT"_bot.log | cut -f3 -d ' ' | cut -f1 -d ' ' | sed -e '/^$/ d')
+    ZIP=$(tail -2 "$LOG_DIR"/"$TARGET_PRODUCT"_"$DATE"_bot.log | cut -f3 -d ' ' | cut -f1 -d ' ' | sed -e '/^$/ d')
 else
-    ZIP=$(grep "Package OTA" "$ANDROID_PRODUCT_OUT"/"$TARGET_PRODUCT"_bot.log | cut -f5 -d '/')
+    ZIP=$(grep "Package OTA" "$LOG_DIR"/"$TARGET_PRODUCT"_"$DATE"_bot.log | cut -f5 -d '/')
 fi
+
+mkdir ../upload
 OUTD=$(echo $(cd ../upload && pwd))
 rm $OUTD/$ZIP
 cp "$ANDROID_PRODUCT_OUT"/$ZIP $OUTD/$ZIP
