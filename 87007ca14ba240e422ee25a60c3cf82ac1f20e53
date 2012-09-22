@@ -1,0 +1,8 @@
+Change-Id: I9713040992442692eb76d3d616a85b2f6dc15637
+Code-Review+2: Gergely Szell (sethyx) <sethyx@gmail.com>
+Verified+1: Gergely Szell (sethyx) <sethyx@gmail.com>
+Submitted-by: Gergely Szell (sethyx) <sethyx@gmail.com>
+Submitted-at: Sat, 22 Sep 2012 11:17:30 +0100
+Reviewed-on: http://gerrit.sudoservers.com/3160
+Project: AOKP/pseudo_buildbot
+Branch: refs/heads/jb
