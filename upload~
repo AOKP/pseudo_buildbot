@@ -1,0 +1,72 @@
+#!/bin/bash
+
+uploadGoo() {
+  DEVICE=$1
+  NAME=$2
+  sftp goo <<EOF 
+cd public_html
+mkdir $1
+quit 
+EOF
+  rsync -av ./$NAME goo:~/public_html/$DEVICE/$NAME
+}
+
+
+uploadInffy() {
+  DEVICE=$1
+  NAME=$2
+  sftp inffy <<EOF 
+cd public_html
+cd roms
+mkdir $DEVICE
+quit 
+EOF
+  rsync -av ./$NAME inffy:~/public_html/roms/$DEVICE/$NAME
+}
+
+uploadAndrotransfer() {
+  DEVICE=$1
+  NAME=$2
+  sftp androtransfer <<EOF 
+cd public_html
+mkdir $DEVICE
+quit 
+EOF
+  rsync -av ./$NAME androtransfer:~/public_html/$DEVICE/$NAME
+}
+
+uploadAokpCo() {
+  DEVICE=$1
+  NAME=$2
+  VERSION=$3
+  sftp bluehost <<EOF
+cd public_html
+mkdir $VERSION
+quit
+EOF
+
+  MD5=$(md5sum $NAME | cut -f1 -d' ')
+  echo $MD5 >> $DEVICE
+  rsync -av ./$DEVICE bluehost:~/public_html/builds/$VERSION/$DEVICE
+  rm ./$MD5
+}
+
+run() {
+	#VER=$(TARGET_PRODUCT)_jb_$(shell echo $(AOKP_BUILD) | cut -d/ -f2)
+	NAME=$2
+	DEVICE=$(echo  $1 |cut  -f2 -d'_')
+  VER=$(echo $AOKP_BUILD | cut -d/ -f2)
+	
+	echo name: $NAME
+	echo device: $DEVICE
+	#echo version: $VER
+
+	cd ~/upload
+	uploadGoo $DEVICE $NAME
+	#uploadInffy $DEVICE $NAME
+	uploadAndrotransfer $DEVICE $NAME
+	uploadAokpCo $DEVICE $VER $VER
+	exit 0
+}
+
+run $1 $2 &

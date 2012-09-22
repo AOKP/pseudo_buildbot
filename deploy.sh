@@ -65,7 +65,7 @@ while read line ;do
     # vzwtab
     DEVNAME=$(echo $line | cut -f2 -d ' ' | cut -f2 -d '_' | cut -f1 -d '-')
     # build_device <lunch combo> <device name>
-    if [ -z "$BUILDN"]; then
+    if [ -z "$BUILDN" ]; then
         ./vendor/$ROM_VENDOR/bot/build_device.sh $line $DEVNAME $BUILDN
     else
         ./vendor/$ROM_VENDOR/bot/build_device.sh $line $DEVNAME
