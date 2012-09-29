@@ -55,7 +55,7 @@ fi
 mkdir ../upload
 OUTD=$(echo $(cd ../upload && pwd))
 rm $OUTD/$ZIP
-if [ -z "$3" ]; then
+if [ -n "$3" ]; then
     NZIP="$TARGET_PRODUCT"_jb-"$3".zip
     cp "$ANDROID_PRODUCT_OUT"/$ZIP $OUTD/$NZIP
 else
