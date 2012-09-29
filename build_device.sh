@@ -62,6 +62,23 @@ else
     cp "$ANDROID_PRODUCT_OUT"/$ZIP $OUTD/$ZIP
 fi
 
+if [ -z "$3" ]; then
+    grep AOKP/ .repo/manifest.xml | cut -f4 -d '"' > .repo_list
+    grep AOKP/ .repo/manifest.xml | cut -f2 -d '"' > .dir_list
+
+    exec 11<.dir_list
+    exec 12<.repo_list
+
+    find . -name .git -execdir git tag -a "$3" -m "$3" \;
+    while read -u 11 DIR && read -u 12 REPO_DIR ;do
+        cd $DIR
+        git push gerrit:/$REPO_DIR "$3"
+    done
+
+    exec 11<&- 12<&-
+    rm .dir_list .repo_list
+fi
+
 # finish
 echo "$2 build complete"
 
