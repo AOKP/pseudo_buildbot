@@ -47,15 +47,15 @@ fi
 
 # clean out of previous zip
 if [ "$BACON" = "true" ]; then
-    ZIP=$(tail -3 "$LOG_DIR"/"$TARGET_PRODUCT"_"$DATE"_bot.log | head -1 | cut -f10 -d '/' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g")
+    ZIP=$(basename $(tail -3 "$LOG_DIR"/"$TARGET_PRODUCT"_"$DATE"_bot.log | head -1 | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g" | cut -f3 -d ' '))
 else
-    ZIP=$(grep "Package OTA" "$LOG_DIR"/"$TARGET_PRODUCT"_"$DATE"_bot.log | cut -f5 -d '/')
+    ZIP=$(basename $(grep "Package OTA" "$LOG_DIR"/"$TARGET_PRODUCT"_"$DATE"_bot.log | cut -f3 -d ' '))
 fi
 
 mkdir ../upload
 OUTD=$(echo $(cd ../upload && pwd))
 rm $OUTD/$ZIP
-if [ -z "$3" ]; then
+if [ -n "$3" ]; then
     NZIP="$TARGET_PRODUCT"_jb-mr1_"$3".zip
     cp "$ANDROID_PRODUCT_OUT"/$ZIP $OUTD/$NZIP
 else
