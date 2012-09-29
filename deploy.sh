@@ -5,6 +5,7 @@ cd $BUILD_ROOT
 repo sync
 . build/envsetup.sh
 
+BUILDN=
 # parse options
 while getopts ":c :o: :b: " opt
 do
@@ -13,13 +14,15 @@ do
         o)
              THEME_VENDOR="$OPTARG"
              echo "using $THEME_VENDOR vendorsetup.sh"
-        ;;
-        b) BUILDN="$OPTARG";;
+             ;;
+        b)
+             BUILDN="$OPTARG"
+             ;;
         \?)
              echo "invalid option: -$OPTARG"
              echo "exiting..."
              exit 1
-        ;;
+             ;;
     esac
 done
 
@@ -65,12 +68,30 @@ while read line ;do
     # vzwtab
     DEVNAME=$(echo $line | cut -f2 -d ' ' | cut -f2 -d '_' | cut -f1 -d '-')
     # build_device <lunch combo> <device name>
-    if [ -z "$BUILDN" ]; then
+    if [ -n "$BUILDN" ]; then
         ./vendor/$ROM_VENDOR/bot/build_device.sh $line $DEVNAME $BUILDN
     else
         ./vendor/$ROM_VENDOR/bot/build_device.sh $line $DEVNAME
     fi
 done < .bot_lunch
+
+# Tag repo if declared
+if [ -n "$BUILDN" ]; then
+    grep AOKP/ .repo/manifest.xml | cut -f4 -d '"' > .repo_list
+    grep AOKP/ .repo/manifest.xml | cut -f2 -d '"' > .dir_list
+
+    exec 11<.dir_list
+    exec 12<.repo_list
+
+    find . -name .git -execdir git tag -a "$BUILDN" -m "$BUILDN" \;
+    while read -u 11 DIR && read -u 12 REPO_DIR ;do
+        cd $DIR
+        "git push gerrit:/$REPO_DIR {$3}"
+    done
+
+    exec 11<&- 12<&-
+    rm .dir_list .repo_list
+fi
 
 # don't be messy
 rm .bot_lunch
