@@ -2,7 +2,6 @@
 
 # $1 should be lunch combo
 # $2 should be device name
-# $3 should be build number (if applicable)
 # select device and prepare varibles
 DATE=$(date +%h-%d-%y)
 LOG_DIR=logs
@@ -55,12 +54,7 @@ fi
 mkdir ../upload
 OUTD=$(echo $(cd ../upload && pwd))
 rm $OUTD/$ZIP
-if [ -z "$3" ]; then
-    NZIP="$TARGET_PRODUCT"_jb-"$3".zip
-    cp "$ANDROID_PRODUCT_OUT"/$ZIP $OUTD/$NZIP
-else
-    cp "$ANDROID_PRODUCT_OUT"/$ZIP $OUTD/$ZIP
-fi
+cp "$ANDROID_PRODUCT_OUT"/$ZIP $OUTD/$ZIP
 
 # finish
 echo "$2 build complete"

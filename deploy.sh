@@ -6,7 +6,7 @@ repo sync
 . build/envsetup.sh
 
 # parse options
-while getopts ":c :o: :b: " opt
+while getopts ":c :o:" opt
 do
     case "$opt" in
         c) CLEAN=true;;
@@ -14,7 +14,6 @@ do
              THEME_VENDOR="$OPTARG"
              echo "using $THEME_VENDOR vendorsetup.sh"
         ;;
-        b) BUILDN="$OPTARG";;
         \?)
              echo "invalid option: -$OPTARG"
              echo "exiting..."
@@ -65,11 +64,7 @@ while read line ;do
     # vzwtab
     DEVNAME=$(echo $line | cut -f2 -d ' ' | cut -f2 -d '_' | cut -f1 -d '-')
     # build_device <lunch combo> <device name>
-    if [ -z "$BUILDN" ]; then
-        ./vendor/$ROM_VENDOR/bot/build_device.sh $line $DEVNAME $BUILDN
-    else
-        ./vendor/$ROM_VENDOR/bot/build_device.sh $line $DEVNAME
-    fi
+    ./vendor/$ROM_VENDOR/bot/build_device.sh $line $DEVNAME
 done < .bot_lunch
 
 # don't be messy
