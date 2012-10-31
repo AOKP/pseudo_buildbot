@@ -59,6 +59,20 @@ SO YOU WANT TO USE PSEUDO?
     Great! That's what she's here for! I do ask though, if you find any ways of
     making her better, shoot a pull request our way.
 
+WHAT IS DENSE CHANGELOG?
+
+    DenseChangelog is a command line java applet that parses git log --pretty
+    outputs into useful json output. This format is good for communicating
+    data to devices, to be parsed into a useful organization changelog
+
+    REQUIREMENTS: to produce JSON formatted changelog you must ensure
+      pseudo_buildbot directory is present in $PATH; java/javac must be
+      propperly installed and the included json-org.jar from
+      http://www.json.org/ is expected in the same directory as
+      ParseDenseChangelog.java
+
+    EXAMPLE: to generate JSON changelog just execute denseChangelog.sh from $TOP
+
 PSEUDOS FUTURE
 
     -Add an if override for the .build_target file so user doesn't have to
@@ -68,8 +82,9 @@ PSEUDOS FUTURE
 
     -Add a nightly/RC/stable toggle for the builds.
 
-    -And more!
+    -DenseChangelog is java; java code can always get better.
 
+    -And more!
 
 AUTHORS OF PSEUDO
 
@@ -78,3 +93,6 @@ AUTHORS OF PSEUDO
 
     KhasMek (http://github.com/KhasMek)
     -Kanger of original script and maker of moar betterer.
+
+    JBirdVegas (http://github.com/JBirdVegas)
+    -Java/JSON junkie and master Unicorn slayer
