@@ -1,9 +1,13 @@
 #!/bin/bash
 
+# If debug is true, it won't sync or modify .bot_lunch
+debug=
 BUILD_ROOT=`pwd`
 cd $BUILD_ROOT
-repo sync
-. build/envsetup.sh
+if [ -z "$debug" ]; then
+    repo sync
+    . build/envsetup.sh
+fi
 
 # parse options
 while getopts ":c :o: :b: " opt
@@ -55,8 +59,10 @@ if [ ! -f vendor/$VENDOR/vendorsetup.sh ]; then
     exit 1
 fi
 
-# aokp_vzwtab-userdebug
-cat vendor/$VENDOR/vendorsetup.sh | cut -f2 -d ' ' > .bot_lunch
+if [[ -z "$debug" && ! -f .bot_lunch ]]; then
+    # aokp_vzwtab-userdebug
+    cat vendor/$VENDOR/vendorsetup.sh | cut -f2 -d ' ' > .bot_lunch
+fi
 
 # build packages
 #
@@ -72,5 +78,7 @@ while read line ;do
     fi
 done < .bot_lunch
 
-# don't be messy
-rm .bot_lunch
+# don't be messy unless you're testie
+if [ -z "$debug" ]; then
+    rm .bot_lunch
+fi
