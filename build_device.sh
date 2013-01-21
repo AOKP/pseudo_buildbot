@@ -47,7 +47,7 @@ fi
 
 # clean out of previous zip
 if [ "$BACON" = "true" ]; then
-    ZIP=$(basename $(tail -3 "$LOG_DIR"/"$TARGET_PRODUCT"_"$DATE"_bot.log | head -1 | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g" | cut -f3 -d ' '))
+    ZIP=$(basename $(tail -5 "$LOG_DIR"/"$TARGET_PRODUCT"_"$DATE"_bot.log | head -1 | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g" | cut -f2 -d ' '))
 else
     ZIP=$(basename $(grep "Package OTA" "$LOG_DIR"/"$TARGET_PRODUCT"_"$DATE"_bot.log | cut -f3 -d ' '))
 fi
