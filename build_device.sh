@@ -52,6 +52,8 @@ else
     ZIP=$(basename $(grep "Package OTA" "$LOG_DIR"/"$TARGET_PRODUCT"_"$DATE"_bot.log | cut -f3 -d ' '))
 fi
 
+BUILDBOT=$BUILD_ROOT/vendor/$TARGET_VENDOR/bot/
+
 # execute finishing scripts (md5, upload, etc) only if the build was successful (ie. actually produced a .zip)
 if [[ $ZIP == *.zip* ]]; then
     # finish
@@ -73,7 +75,6 @@ if [[ $ZIP == *.zip* ]]; then
     # upload
     echo "checking on upload reference file"
 
-    BUILDBOT=$BUILD_ROOT/vendor/$TARGET_VENDOR/bot/
     cd $BUILDBOT
     if test -x upload ; then
         echo "Upload file exists, executing now"
@@ -86,6 +87,10 @@ if [[ $ZIP == *.zip* ]]; then
     fi
 
 else
+    cd $BUILDBOT
+    if test -x report_fail ; then
+        ./report_fail $2
+    fi
     echo "$2 build failed, exiting"
 fi
 
