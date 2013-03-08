@@ -89,6 +89,7 @@ if [ -n "$BUILDN" ]; then
     exec 11<.dir_list
     exec 12<.repo_list
 
+    repo manifest -r -o $BUILDN-manifest.xml
     find . -name .git -execdir git tag -a "$BUILDN" -m "$BUILDN" \;
     while read -u 11 DIR && read -u 12 REPO_DIR ;do
         cd $DIR
