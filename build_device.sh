@@ -95,3 +95,8 @@ else
 fi
 
 cd $BUILD_ROOT
+
+# remove device specific out files to save space on SSD
+if [ "$SSD_BUILD" = 1 ]; then
+    rm -rf $ANDROID_PRODUCT_OUT
+fi
