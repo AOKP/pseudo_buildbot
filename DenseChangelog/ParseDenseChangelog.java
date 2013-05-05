@@ -23,6 +23,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.Exception;
+import java.lang.IndexOutOfBoundsException;
+import java.lang.System;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
@@ -39,6 +42,7 @@ import java.util.Date;
 public class ParseDenseChangelog {
     static String TAG;
     static boolean DEBUG = false; // always ship false else
+    static boolean CHATTY = false;
     // term output is mostly noise
     // exit codes
     static int NO_ERROR = 0;
@@ -61,7 +65,7 @@ public class ParseDenseChangelog {
             return;
         }
 
-        if (true) {
+        if (DEBUG) {
             for (String s : args) {
                 System.out.println("Found arg (" + s + ")");
             }
@@ -84,7 +88,7 @@ public class ParseDenseChangelog {
             }
         } catch (IndexOutOfBoundsException outOfBounds) {
             outFile = new File(inFile.getParentFile().getAbsolutePath()
-                + "/dense_" + inFile.getName());
+                    + "/dense_" + inFile.getName());
         }
         if (!inFile.exists()) {
             System.out.println("input file was not found... check your path");
@@ -100,7 +104,7 @@ public class ParseDenseChangelog {
         }
         System.out.println("Log parser splicing at symbol: ¶");
         String[] commitsList = splitCommits(jsonString, "\\¶");
-        if (DEBUG) {
+        if (CHATTY) {
             for (String s : commitsList) {
                 System.out.println("commits to string: " + s);
             }
@@ -109,7 +113,11 @@ public class ParseDenseChangelog {
         System.out.println("Generating JSON formated output...");
         JSONArray jsonArray = new JSONArray();
         for (int i = 0; numberOfCommits > i; i++) {
-            jsonArray.put(getJsonObjectFromCommit(commitsList[i]));
+            try {
+                jsonArray.put(getJsonObjectFromCommit(commitsList[i]));
+            } catch (IndexOutOfBoundsException indexException) {
+                if (DEBUG) System.out.println("Fail at index: " + i);
+            }
         }
 
         if (args[args.length - 1] != null && args[args.length - 1].trim() != "") {
@@ -120,9 +128,18 @@ public class ParseDenseChangelog {
                 try {
                     commit = jsonArray.getJSONObject(i);
                     Date time = new Date();
+                    // Wed May 1 13:11:53 2013 -0700
                     DateFormat df = new SimpleDateFormat("EEE MMM dd hh:mm:ss yyyy");
                     DateFormat endFormat = new SimpleDateFormat("MM/dd/yyyy");
-                    Date endDate = endFormat.parse(args[args.length - 1]);
+
+                    // if no end date was supplied use current time
+                    Date endDate = null;
+                    try {
+                        endDate = endFormat.parse(args[args.length - 1]);
+                    } catch (Exception e) {
+                        endDate = new Date();
+                        endDate.setTime(System.currentTimeMillis());
+                    }
                     try {
                         time = df.parse(commit.getString("committer_date"));
                     } catch (NumberFormatException e) {
@@ -188,7 +205,8 @@ public class ParseDenseChangelog {
         }
     }
 
-    private static JSONObject getJsonObjectFromCommit(String commitString) {
+    private static JSONObject getJsonObjectFromCommit(String commitString)
+            throws IndexOutOfBoundsException {
         JSONObject commitObject = new JSONObject();
         String[] info = splitCommits(commitString, "\\|");
         try {
@@ -212,13 +230,15 @@ public class ParseDenseChangelog {
                 debugParse("committer_name", info[6]);
                 debugParse("committer_date", info[7]);
                 debugParse("subject", info[8]);
-                debugParse("body", info[9]);
+                if (CHATTY)
+                    debugParse("body", info[9]);
             }
         } catch (JSONException e) {
             // shouldn't happen
             e.printStackTrace();
         } catch (IndexOutOfBoundsException lengthError) {
             // our split array is the incorrect length
+            throw new IndexOutOfBoundsException("Failed to parse commit information for provided commit");
         }
         return commitObject;
     }
