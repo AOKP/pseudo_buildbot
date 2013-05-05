@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.System;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -22,7 +23,14 @@ public class LastUpdateFinder {
         }
 
         JSONArray input = new JSONObject(args[0]).getJSONArray("list");
-        long time = Long.parseLong((String) input.getJSONObject(0).get("modified")) * 1000;
+        long time;
+        try {
+            time = Long.parseLong((String) input.getJSONObject(1).get("modified")) * 1000;
+        } catch (JSONException je) {
+            // may contain nightlies folder check the next in line
+            System.out.println("Failed to find date... Trying one more time to find date.");
+            time = Long.parseLong((String) input.getJSONObject(1).get("modified")) * 1000;
+        }
         DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
         FileWriter fileWriter = null;
         try {
