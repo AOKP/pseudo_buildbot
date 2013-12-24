@@ -62,7 +62,7 @@ if [[ $ZIP == *.zip* ]]; then
     OUTD=$(echo $(cd ../upload && pwd))
     rm $OUTD/$ZIP
     if [ -n "$3" ]; then
-        NZIP="$TARGET_PRODUCT"_jb-mr1_"$3".zip
+        NZIP="$TARGET_PRODUCT"_kitkat-mr1_"$3".zip
         cp "$ANDROID_PRODUCT_OUT"/$ZIP $OUTD/$NZIP
     else
         cp "$ANDROID_PRODUCT_OUT"/$ZIP $OUTD/$ZIP
