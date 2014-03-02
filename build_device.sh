@@ -58,18 +58,24 @@ BUILDBOT=$BUILD_ROOT/vendor/$TARGET_VENDOR/bot/
 if [[ $ZIP == *.zip* ]]; then
     # finish
     echo "$2 build complete"
-    mkdir ../upload
-    OUTD=$(echo $(cd ../upload && pwd))
-    rm $OUTD/$ZIP
+    OUTD="../upload"
+    if [ ! -d "$OUTD/" ]; then
+        mkdir "$OUTD"
+    fi
+    # Convert $OUTD into an absolute path
+    OUTDL=$(echo $(cd "$OUTD" && pwd))
+    if [ -f "$OUTDL/$ZIP" ]; then
+        rm $OUTDL/$ZIP
+    fi
     if [ -n "$3" ]; then
         NZIP="$TARGET_PRODUCT"_kitkat_"$3".zip
-        cp "$ANDROID_PRODUCT_OUT"/$ZIP $OUTD/$NZIP
+        cp "$ANDROID_PRODUCT_OUT"/$ZIP $OUTDL/$NZIP
     else
-        cp "$ANDROID_PRODUCT_OUT"/$ZIP $OUTD/$ZIP
+        cp "$ANDROID_PRODUCT_OUT"/$ZIP $OUTDL/$ZIP
     fi
 
     # md5sum list
-    cd $OUTD
+    cd $OUTDL
     md5sum $ZIP | cat >> md5sum
 
     # upload
@@ -78,8 +84,8 @@ if [[ $ZIP == *.zip* ]]; then
     cd $BUILDBOT
     if test -x upload ; then
         echo "Upload file exists, executing now"
-        cp upload $OUTD
-        cd $OUTD
+        cp upload $OUTDL
+        cd $OUTDL
         # device and zip names are passed on for upload
         ./upload $2 $ZIP && rm upload
     else
