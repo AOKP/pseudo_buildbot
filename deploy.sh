@@ -72,7 +72,7 @@ fi
 # read the file and execute lunch
 while read line ;do
     # vzwtab
-    DEVNAME=$(echo $line | cut -f2 -d ' ' | cut -f2 -d '_' | sed -e 's/-userdebug//g')
+    DEVNAME=$(echo $line | cut -f2 -d ' ' | cut -f2-3 -d '_' | sed -e 's/-userdebug//g')
     # build_device <lunch combo> <device name>
     if [ -n "$BUILDN" ]; then
         ./vendor/$ROM_VENDOR/bot/build_device.sh $line $DEVNAME $BUILDN
